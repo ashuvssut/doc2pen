@@ -43,6 +43,7 @@ import {
 } from "@material-ui/icons";
 import IconsLibrary from "./../IconLibrary/IconsLibrary";
 import { ChromePicker } from "react-color";
+import NumberSlider from "./components/NumberSlider/NumberSlider";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -174,9 +175,9 @@ function VerticalTabs(props) {
 	};
 
 	const classes = useStyles();
-	const [value, setValue] = React.useState(0);
+	const [activeTabIndex, setActiveTabIndex] = React.useState(2);
 	const handleChange = (event, newValue) => {
-		setValue(newValue);
+		setActiveTabIndex(newValue);
 	};
 
 	function Feature({ title, children, classname }) {
@@ -212,7 +213,7 @@ function VerticalTabs(props) {
 				<Tabs
 					orientation="vertical"
 					variant="scrollable"
-					value={value}
+					value={activeTabIndex}
 					onChange={handleChange}
 					className={classes.tabs}
 				>
@@ -273,7 +274,7 @@ function VerticalTabs(props) {
 						{...a11yProps(5)}
 					/>
 				</Tabs>
-				<TabPanel value={value} index={0}>
+				<TabPanel value={activeTabIndex} index={0}>
 					<List component="div">
 						<ListItem button onClick={clear}>
 							<ListItemIcon>
@@ -328,7 +329,7 @@ function VerticalTabs(props) {
 						</ListItem>
 					</List>
 				</TabPanel>
-				<TabPanel value={value} index={1}>
+				<TabPanel value={activeTabIndex} index={1}>
 					<List component="div">
 						<Feature title="Canvas Setup">
 							<div className={styles.colorPicker}>
@@ -349,7 +350,7 @@ function VerticalTabs(props) {
 						</Feature>
 					</List>
 				</TabPanel>
-				<TabPanel value={value} index={2}>
+				<TabPanel value={activeTabIndex} index={2}>
 					<List component="div">
 						<Feature title="Shapes and Tools">
 							<Shape type_="pen" id="sketch-shapes-pen" label="Pen">
@@ -427,14 +428,12 @@ function VerticalTabs(props) {
 											classname={styles.sliderWrapper}
 											title={"Fill Opacity"}
 										>
-											<input
-												className={styles.slider}
-												type="range"
+											<NumberSlider
 												min={0}
 												max={1}
 												step={0.1}
 												value={fillOpacity}
-												onChange={e => setFillOpacity(e.target.value)}
+												onChangeFunc={setFillOpacity}
 											/>
 										</Feature>
 									</>
@@ -445,42 +444,36 @@ function VerticalTabs(props) {
 											classname={styles.sliderWrapper}
 											title={"Fill Weight"}
 										>
-											<input
-												className={styles.slider}
-												type="range"
+											<NumberSlider
 												min={1}
 												max={10}
 												step={0.1}
 												value={fillWeight}
-												onChange={e => setFillWeight(e.target.value)}
+												onChangeFunc={setFillWeight}
 											/>
 										</Feature>
 										<Feature
 											classname={styles.sliderWrapper}
 											title={"Fill Hachure Angle"}
 										>
-											<input
-												className={styles.slider}
-												type="range"
-												min={0}
-												max={360}
+											<NumberSlider
+												min={-180}
+												max={180}
 												step={1}
-												value={hachureAngle + 180}
-												onChange={e => setHachureAngle(e.target.value - 180)}
+												value={hachureAngle}
+												onChangeFunc={setHachureAngle}
 											/>
 										</Feature>
 										<Feature
 											classname={styles.sliderWrapper}
 											title={"Fill Hachure Gap"}
 										>
-											<input
-												className={styles.slider}
-												type="range"
+											<NumberSlider
 												min={1}
 												max={10}
 												step={0.1}
 												value={hachureGap}
-												onChange={e => setHachureGap(e.target.value)}
+												onChangeFunc={setHachureGap}
 											/>
 										</Feature>
 									</>
@@ -507,25 +500,21 @@ function VerticalTabs(props) {
 							</div>
 						</Feature>
 						<Feature classname={styles.sliderWrapper} title={"Roughness"}>
-							<input
-								className={styles.slider}
-								type="range"
+							<NumberSlider
 								min={0}
 								max={5}
 								step={0.1}
 								value={roughness}
-								onChange={e => setRoughness(e.target.value)}
+								onChangeFunc={setRoughness}
 							/>
 						</Feature>
 						<Feature classname={styles.sliderWrapper} title={"Stroke Bowing"}>
-							<input
-								className={styles.slider}
-								type="range"
+							<NumberSlider
 								min={0}
 								max={10}
 								step={0.1}
 								value={bowing}
-								onChange={e => setBowing(e.target.value)}
+								onChangeFunc={setBowing}
 							/>
 						</Feature>
 						<Feature title="Stroke Width">
@@ -582,7 +571,7 @@ function VerticalTabs(props) {
 						</Feature>
 					</List>
 				</TabPanel>
-				<TabPanel value={value} index={3}>
+				<TabPanel value={activeTabIndex} index={3}>
 					<List component="div">
 						<Feature title="Stroke">
 							<div className={styles.colorPicker}>
@@ -605,13 +594,12 @@ function VerticalTabs(props) {
 							classname={styles.sliderWrapper}
 							title={`Font [ ${fontSize} ]`}
 						>
-							<input
-								className={styles.slider}
-								type="range"
-								min="10"
-								max="20"
-								value={fontSize * 10}
-								onChange={e => setFontSize(e.target.value / 10)}
+							<NumberSlider
+								min={10}
+								max={20}
+								value={fontSize}
+								step={1}
+								onChange={setFontSize}
 							/>
 						</Feature>
 						<Feature title="Font Style">
@@ -652,14 +640,14 @@ function VerticalTabs(props) {
 						</Feature>
 					</List>
 				</TabPanel>
-				<TabPanel value={value} index={4}>
+				<TabPanel value={activeTabIndex} index={4}>
 					<List component="div">
 						<IconsLibrary />
 					</List>
 				</TabPanel>
 				<TabPanel
 					className={classes.tabPanelClose}
-					value={value}
+					value={activeTabIndex}
 					index={5}
 				></TabPanel>
 			</div>

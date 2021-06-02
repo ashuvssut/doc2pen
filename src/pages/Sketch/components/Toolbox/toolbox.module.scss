@@ -21,52 +21,6 @@
 		display: grid;
 		justify-items: left;
 		width: 100%;
-		.slider {
-			outline: 0;
-			border: 0;
-			border-radius: 500px;
-			width: 90%;
-			transition: box-shadow 0.2s ease-in-out;
-			overflow: hidden;
-			height: 12px;
-			-webkit-appearance: none;
-			background-color: colors.$bluish-white;
-			&::-webkit-slider-runnable-track {
-				height: 12px;
-				-webkit-appearance: none;
-				color: colors.$medium-dark-grey;
-				-webkit-transition: box-shadow 0.2s ease-in-out;
-				transition: box-shadow 0.2s ease-in-out;
-			}
-			&::-webkit-slider-thumb {
-				width: 12px;
-				-webkit-appearance: none;
-				height: 12px;
-				cursor: pointer;
-				background: colors.$white;
-				border: colors.$light-grey solid 1px;
-				box-shadow: -329px 0 0 320px colors.$royal-blue,
-					inset 0 0 0 20px colors.$navy-blue;
-				border-radius: 50%;
-				-webkit-transition: box-shadow 0.2s ease-in-out;
-				transition: box-shadow 0.2s ease-in-out;
-				position: relative;
-			}
-			&:active {
-				&::-webkit-slider-thumb {
-					background: colors.$white;
-					box-shadow: -330px 0 0 320px colors.$royal-blue,
-						inset 0 0 0 3px colors.$navy-blue;
-				}
-			}
-			&:hover {
-				&::-webkit-slider-thumb {
-					background: colors.$white;
-					box-shadow: -330px 0 0 320px colors.$royal-blue,
-						inset 0 0 0 3px colors.$navy-blue;
-				}
-			}
-		}
 	}
 }
 
