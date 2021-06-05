@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./canvas.module.scss";
 import Toolbox from "./Toolbox/Toolbox";
-import { MdUndo, MdRedo } from "react-icons/md";
+import { DragIndicator, Undo, Redo } from "@material-ui/icons";
+import Draggable from "react-draggable";
 import ReactSnackBar from "react-js-snackbar";
 import checkBox from "./../../../assets/images/checkmark.svg";
 import rough from "roughjs/bin/rough";
@@ -55,12 +56,12 @@ function Canvas() {
 	const [typeState, setTypeState] = useState(null);
 	const [downPoint, setDownPoint] = useState({ x: "", y: "" });
 	const [mousePosition, setMousePosition] = useState({ x: "0", y: "0" });
-	const [canvasWidth, setCanvasWidth] = useState(window.innerWidth - 50);
-	const [canvasHeight, setCanvasHeight] = useState(window.innerHeight - 100);
+	const [canvasWidth, setCanvasWidth] = useState(window.innerWidth - 51);
+	const [canvasHeight, setCanvasHeight] = useState(window.innerHeight - 78);
 
 	const handleResizeListener = () => {
-		setCanvasWidth(window.innerWidth - 50);
-		setCanvasHeight(window.innerHeight - 100);
+		setCanvasWidth(window.innerWidth - 51);
+		setCanvasHeight(window.innerHeight - 78);
 	};
 
 	const getLastCanvasState = useCallback(
@@ -123,8 +124,8 @@ function Canvas() {
 
 	function relativeCoordinatesForEvent(event) {
 		return {
-			x: event.pageX - 25,
-			y: event.pageY - 82,
+			x: event.pageX - canvasRef.current.offsetLeft,
+			y: event.pageY - canvasRef.current.offsetParent.offsetTop,
 		};
 	}
 	function handleMouseDown(event) {
@@ -252,7 +253,6 @@ function Canvas() {
 		setIsDrawing(false);
 		event.preventDefault();
 		setTypeState(null);
-		// console.log(context.getImageData(0, 0, canvasWidth, canvasHeight));
 	}
 
 	function handleMouseLeave() {
@@ -629,55 +629,60 @@ function Canvas() {
 				IconsLibrary={<IconsLibrary />}
 			/>
 
-			{/* ----- Undo & Redo----- */}
-			<div
-				className={`${styles.feature_container} ${styles.download_clear_container}`}
-			>
-				<label htmlFor="sketch-dcd-undo" title="Undo">
-					<div
-						className={styles.feature}
-						onClick={() => undo()}
-						style={{
-							cursor: `${canvasStateAt === -1 ? "not-allowed" : "pointer"}`,
-						}}
-						id="sketch-dcd-undo"
-					>
-						<MdUndo size={20} />
-					</div>
-				</label>
-				<label htmlFor="sketch-dcd-redo" title="Redo">
-					<div
-						className={styles.feature}
-						onClick={() => redo()}
-						style={{
-							cursor: `${
-								canvasStateAt === canvasStates.length - 1
-									? "not-allowed"
-									: "pointer"
-							}`,
-						}}
-						id="sketch-dcd-redo"
-					>
-						<MdRedo size={20} />
-					</div>
-				</label>
-			</div>
-
 			<canvas
 				ref={canvasRef}
-				width={`${canvasWidth}`}
-				height={`${canvasHeight}`}
 				className={styles.canvas}
+				width={canvasWidth}
+				height={canvasHeight}
 				onMouseDown={handleMouseDown}
 				onMouseMove={handleMouseMove}
 				onMouseUp={handleMouseUp}
 				onMouseLeave={handleMouseLeave}
 			/>
+
+			{/* ----- Undo & Redo----- */}
+			<Draggable>
+				<div
+					className={`${styles.feature_container} ${styles.download_clear_container}`}
+				>
+					<label htmlFor="sketch-dcd-undo" title="Undo">
+						<div
+							className={styles.feature}
+							onClick={() => undo()}
+							style={{
+								cursor: `${canvasStateAt === -1 ? "not-allowed" : "pointer"}`,
+							}}
+							id="sketch-dcd-undo"
+						>
+							<Undo fontSize="small" />
+						</div>
+					</label>
+					<label htmlFor="sketch-dcd-redo" title="Redo">
+						<div
+							className={styles.feature}
+							onClick={() => redo()}
+							style={{
+								cursor: `${
+									canvasStateAt === canvasStates.length - 1
+										? "not-allowed"
+										: "pointer"
+								}`,
+							}}
+							id="sketch-dcd-redo"
+						>
+							<Redo fontSize="small" />
+						</div>
+					</label>
+					<DragIndicator style={{ cursor: "grab" }} fontSize="large" />
+				</div>
+			</Draggable>
+
 			<div className={styles.mousePosition}>
 				Mouse Position: (x, y) = ({mousePosition.x}, {mousePosition.y})
 			</div>
 
 			{/* ----- Text ----- */}
+
 			<div
 				style={{ height: canvasHeight, width: canvasWidth }}
 				className={styles.text_container}
